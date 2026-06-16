@@ -1,65 +1,108 @@
+import Link from "next/link";
 import Image from "next/image";
+import { getFeaturedRecipes, getCategories } from "@/lib/services/recipes";
+import { Clock, Star } from "lucide-react";
+import { AdSlot } from "@/components/ads/AdSlot";
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+
+export default async function HomePage() {
+  const [featured, categories] = await Promise.all([
+    getFeaturedRecipes(),
+    getCategories(),
+  ]);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div>
+      <section className="mx-auto max-w-6xl px-4 py-16 text-center">
+        <h1 className="font-serif text-4xl italic text-primary md:text-5xl">
+          Caderno de Receitas Digitais
+        </h1>
+        <p className="font-narrative mx-auto mt-4 max-w-2xl text-muted">
+          Receitas de família reunidas com clareza e sofisticação. Descubra pratos
+          tradicionais, ajuste porções e salve seus favoritos.
+        </p>
+        <div className="mt-8 flex flex-wrap justify-center gap-4">
+          <Link
+            href="/receitas"
+            className="rounded bg-primary px-6 py-3 font-heading text-xs font-bold uppercase tracking-widest text-background"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            Ver receitas
+          </Link>
+          <Link
+            href="/busca"
+            className="rounded border border-primary px-6 py-3 font-heading text-xs font-bold uppercase tracking-widest text-primary"
           >
-            Documentation
-          </a>
+            O que tenho na geladeira
+          </Link>
         </div>
-      </main>
+      </section>
+
+      <AdSlot slot={1} className="px-4" />
+
+      {categories.length > 0 && (
+        <section className="mx-auto max-w-6xl px-4 py-10">
+          <h2 className="font-heading text-sm font-bold uppercase tracking-widest text-primary">
+            Categorias
+          </h2>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {categories.map((cat) => (
+              <Link
+                key={cat}
+                href={`/receitas?categoria=${encodeURIComponent(cat)}`}
+                className="rounded-full border border-border px-4 py-1.5 text-sm hover:border-primary hover:text-primary"
+              >
+                {cat}
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <section className="mx-auto max-w-6xl px-4 py-10">
+        <h2 className="font-heading text-sm font-bold uppercase tracking-widest text-primary">
+          Destaques
+        </h2>
+        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {featured.map((recipe) => (
+            <Link
+              key={recipe.id}
+              href={`/receitas/${recipe.slug}`}
+              className="group overflow-hidden rounded border border-border transition hover:border-primary/40"
+            >
+              {recipe.imageUrl && (
+                <div className="relative aspect-[4/3] bg-border/30">
+                  <Image
+                    src={recipe.imageUrl}
+                    alt={recipe.title}
+                    fill
+                    className="object-cover transition group-hover:scale-105"
+                    sizes="(max-width:768px) 100vw, 33vw"
+                  />
+                </div>
+              )}
+              <div className="p-4">
+                <h3 className="font-serif text-lg italic text-primary">{recipe.title}</h3>
+                <div className="mt-2 flex items-center gap-3 text-xs text-muted">
+                  <span className="flex items-center gap-1">
+                    <Clock className="h-3 w-3" />
+                    {recipe.prepTimeMinutes} min
+                  </span>
+                  {recipe.avgRating > 0 && (
+                    <span className="flex items-center gap-1 text-accent">
+                      <Star className="h-3 w-3 fill-accent" />
+                      {recipe.avgRating.toFixed(1)}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+        {featured.length === 0 && (
+          <p className="mt-4 text-muted">Em breve, novas receitas.</p>
+        )}
+      </section>
     </div>
   );
 }

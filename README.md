@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Dona Angela — Caderno de Receitas Digitais
 
-## Getting Started
+Portal de receitas de família com painel administrativo, favoritos, comentários e busca por ingredientes.
 
-First, run the development server:
+> Antes de implementar novas features, consulte o [SITE_PLAYBOOK](https://github.com/lextechsolutions) da LexTech.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## Stack
+
+| Tecnologia | Papel |
+| ---------- | ----- |
+| Next.js 16 | App Router, SSR |
+| Neon Postgres | Banco de dados |
+| Prisma | ORM |
+| Auth.js v5 | Login e-mail/senha + Google |
+| Tailwind CSS 4 | Design system Dona Angela |
+| Vercel | Deploy |
+
+## Rotas
+
+| Rota | Descrição |
+| ---- | --------- |
+| `/` | Home |
+| `/receitas` | Listagem |
+| `/receitas/[slug]` | Receita interativa |
+| `/busca` | Busca + geladeira |
+| `/entrar`, `/cadastro` | Auth |
+| `/meu-caderno` | Favoritos |
+| `/minha-conta` | Configurações |
+| `/admin` | Painel CMS |
+| `/privacy` | LGPD |
+
+## Variáveis de ambiente
+
+Copie `.env.example` para `.env.local` e preencha:
+
+```env
+DATABASE_URL=postgresql://...
+AUTH_SECRET=...
+AUTH_URL=http://localhost:3000
+GOOGLE_CLIENT_ID=...
+GOOGLE_CLIENT_SECRET=...
+BLOB_READ_WRITE_TOKEN=...
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
+ADMIN_SEED_EMAIL=admin@donaangela.com.br
+ADMIN_SEED_PASSWORD=changeme123
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Instalação
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm install
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Banco local com Docker
+docker compose up -d
+npx prisma migrate deploy
+npm run db:seed
 
-## Learn More
+npm run dev    # http://localhost:3000
+```
 
-To learn more about Next.js, take a look at the following resources:
+Acesse http://localhost:3000
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Admin:** `admin@donaangela.com.br` / `changeme123`  
+**Usuário teste:** `usuario@teste.com` / `usuario123`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Scripts
 
-## Deploy on Vercel
+```bash
+npm run dev          # desenvolvimento
+npm run build        # build produção
+npm run test         # testes Jest
+npm run db:seed      # popular banco
+docker compose up -d # subir Postgres local
+docker compose down  # parar Postgres local
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Infraestrutura (produção)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Serviço | Status |
+| ------- | ------ |
+| GitHub | ⬜ |
+| Vercel | ⬜ |
+| Neon Postgres | ⬜ |
+| Domínio donaangela.com.br | ⬜ |
+| Google OAuth | ⬜ |
+| Vercel Blob | ⬜ |

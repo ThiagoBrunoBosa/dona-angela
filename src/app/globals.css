@@ -1,26 +1,64 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fcfbfa;
+  --foreground: #2c2a29;
+  --primary: #5c2c16;
+  --accent: #a67c52;
+  --border: #d4c5b9;
+  --brand-dark: #2d2926;
+  --muted: #6b6560;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-primary: var(--primary);
+  --color-accent: var(--accent);
+  --color-border: var(--border);
+  --color-brand-dark: var(--brand-dark);
+  --color-muted: var(--muted);
+  --font-serif: var(--font-playfair);
+  --font-heading: var(--font-montserrat);
+  --font-narrative: var(--font-lora);
+  --font-sans: var(--font-inter);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+.font-serif {
+  font-family: var(--font-playfair), Georgia, serif;
+}
+
+.font-heading {
+  font-family: var(--font-montserrat), Helvetica, sans-serif;
+  letter-spacing: 0.05em;
+}
+
+.font-narrative {
+  font-family: var(--font-lora), Georgia, serif;
+  line-height: 1.6;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+.prose-recipe h2,
+.prose-recipe h3 {
+  color: var(--primary);
+}
+
+.ingredient-checked {
+  opacity: 0.5;
+  text-decoration: line-through;
 }
