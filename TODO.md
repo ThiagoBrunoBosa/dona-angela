@@ -17,7 +17,8 @@
 
 ## 🔴 Alta Prioridade
 
-- [ ] Configurar Neon Postgres em produção e `DATABASE_URL` na Vercel
+- [x] Configurar Neon Postgres em produção e `DATABASE_URL` na Vercel
+- [x] Deploy Vercel — https://dona-angela.vercel.app
 - [ ] Configurar Google OAuth (Console Google Cloud)
 - [ ] Registrar domínio `donaangela.com.br` e apontar DNS Vercel
 - [ ] Configurar `BLOB_READ_WRITE_TOKEN` para upload de imagens

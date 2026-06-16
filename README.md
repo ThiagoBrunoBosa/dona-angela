@@ -63,7 +63,10 @@ npm run dev    # http://localhost:3000
 Acesse http://localhost:3000
 
 **Admin:** `admin@donaangela.com.br` / `changeme123`  
-**Usuário teste:** `usuario@teste.com` / `usuario123`
+**Usuário teste:** `usuario@teste.com` / `usuario123`  
+**Caio Devani:** `caio.devani@donaangela.com.br` / `caio123`
+
+Consulte [MANUAL.md](./MANUAL.md) para o guia completo de uso e testes.
 
 ## Scripts
 
@@ -80,9 +83,9 @@ docker compose down  # parar Postgres local
 
 | Serviço | Status |
 | ------- | ------ |
-| GitHub | ⬜ |
-| Vercel | ⬜ |
-| Neon Postgres | ⬜ |
+| GitHub | ✅ [ThiagoBrunoBosa/dona-angela](https://github.com/ThiagoBrunoBosa/dona-angela) |
+| Vercel | ✅ [dona-angela.vercel.app](https://dona-angela.vercel.app) |
+| Neon Postgres | ✅ base `donaangela` no mesmo cluster Bora/GPSVendas |
 | Domínio donaangela.com.br | ⬜ |
 | Google OAuth | ⬜ |
 | Vercel Blob | ⬜ |

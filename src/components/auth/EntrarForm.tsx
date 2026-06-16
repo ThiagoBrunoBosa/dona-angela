@@ -1,13 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { Button, Input, Label } from "@/components/ui/form";
 
 export function EntrarForm() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -23,20 +21,24 @@ export function EntrarForm() {
     setLoading(true);
     setError("");
 
-    const res = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
+    try {
+      const res = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
 
-    if (res?.error) {
-      setError("E-mail ou senha incorretos.");
+      if (res?.error) {
+        setError("E-mail ou senha incorretos.");
+        return;
+      }
+
+      window.location.href = callbackUrl;
+    } catch {
+      setError("Erro ao entrar. Tente novamente.");
+    } finally {
       setLoading(false);
-      return;
     }
-
-    router.push(callbackUrl);
-    router.refresh();
   };
 
   return (

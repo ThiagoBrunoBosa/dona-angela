@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { auth } from "@/lib/auth";
+import { auth, signOut } from "@/lib/auth";
 import { Logo } from "@/components/layout/Logo";
+import { LogOut } from "lucide-react";
 
 const adminNav = [
   { href: "/admin", label: "Dashboard" },
@@ -14,16 +15,33 @@ export default async function AdminLayout({
   const session = await auth();
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b border-border px-4 py-3">
-        <div className="mx-auto flex max-w-6xl items-center justify-between">
+    <div className="flex min-h-screen flex-col bg-background">
+      <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
           <Logo showTagline={false} size="sm" />
-          <span className="font-heading text-xs uppercase tracking-widest text-muted">
-            Painel Admin — {session?.user?.email}
-          </span>
+          <div className="flex items-center gap-4">
+            <span className="hidden font-heading text-xs uppercase tracking-widest text-muted sm:inline">
+              Painel Admin — {session?.user?.email}
+            </span>
+            <form
+              action={async () => {
+                "use server";
+                await signOut({ redirectTo: "/" });
+              }}
+            >
+              <button
+                type="submit"
+                className="flex items-center gap-1 rounded p-2 font-heading text-xs uppercase tracking-widest text-muted hover:bg-border/40 hover:text-foreground"
+                aria-label="Sair"
+              >
+                <LogOut className="h-4 w-4" />
+                <span className="hidden sm:inline">Sair</span>
+              </button>
+            </form>
+          </div>
         </div>
       </header>
-      <div className="mx-auto flex max-w-6xl gap-8 px-4 py-8">
+      <div className="mx-auto flex w-full max-w-6xl flex-1 gap-8 px-4 py-8">
         <nav aria-label="Admin" className="w-48 shrink-0 space-y-2">
           {adminNav.map((item) => (
             <Link

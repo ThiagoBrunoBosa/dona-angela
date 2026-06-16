@@ -31,6 +31,18 @@ async function main() {
     },
   });
 
+  const caioPassword = await bcrypt.hash("caio123", 12);
+  const caio = await prisma.user.upsert({
+    where: { email: "caio.devani@donaangela.com.br" },
+    update: { name: "Caio Devani", role: Role.USER, passwordHash: caioPassword },
+    create: {
+      email: "caio.devani@donaangela.com.br",
+      name: "Caio Devani",
+      passwordHash: caioPassword,
+      role: Role.USER,
+    },
+  });
+
   const recipes = [
     {
       slug: "bolo-de-fuba-da-familia",
@@ -164,7 +176,7 @@ async function main() {
     });
   }
 
-  console.log("Seed OK — admin:", admin.email);
+  console.log("Seed OK — admin:", admin.email, "| user:", caio.email);
 }
 
 main()

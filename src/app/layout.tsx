@@ -6,8 +6,7 @@ import {
   Inter,
 } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+import { SiteShell } from "@/components/layout/SiteShell";
 import { Providers } from "@/components/Providers";
 import { CookieBanner } from "@/components/ui/CookieBanner";
 import { BASE_URL } from "@/lib/utils";
@@ -96,9 +95,7 @@ export default function RootLayout({
       </head>
       <body className="flex min-h-full flex-col font-sans antialiased">
         <Providers>
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          <SiteShell>{children}</SiteShell>
           <CookieBanner />
         </Providers>
         {gaId && <GoogleAnalytics gaId={gaId} />}
