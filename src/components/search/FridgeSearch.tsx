@@ -90,7 +90,7 @@ export function FridgeSearch() {
         <div>
           <Label htmlFor="search">
             {mode === "fridge"
-              ? "Ingredientes disponíveis (separados por vírgula)"
+              ? "Ingredientes disponíveis (vírgula ou espaço)"
               : "Buscar receitas"}
           </Label>
           <Input
@@ -99,7 +99,7 @@ export function FridgeSearch() {
             onChange={(e) => setQuery(e.target.value)}
             placeholder={
               mode === "fridge"
-                ? "ovos, farinha, leite..."
+                ? "ovos presunto leite..."
                 : "bolo, sobremesa..."
             }
             required

@@ -19,6 +19,7 @@ model User {
   name         String?
   image        String?
   role         Role       @default(USER)
+  lastLoginAt  DateTime?
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   favorites    Favorite[]
@@ -73,6 +74,7 @@ model Recipe {
   imageUrl        String?
   avgRating       Float              @default(0)
   published       Boolean            @default(false)
+  featured        Boolean            @default(false)
   createdAt       DateTime           @default(now())
   updatedAt       DateTime           @updatedAt
   ingredients     Ingredient[]
@@ -80,16 +82,27 @@ model Recipe {
   affiliates      AffiliateProduct[]
   favorites       Favorite[]
   comments        Comment[]
+  images          RecipeImage[]
+}
+
+model RecipeImage {
+  id        String @id @default(cuid())
+  recipeId  String
+  url       String
+  sortOrder Int    @default(0)
+  recipe    Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@index([recipeId])
 }
 
 model Ingredient {
-  id       String @id @default(cuid())
-  recipeId String
-  quantity String
-  unit     String
-  name     String
-  sortOrder Int   @default(0)
-  recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  id        String @id @default(cuid())
+  recipeId  String
+  quantity  String
+  unit      String
+  name      String
+  sortOrder Int    @default(0)
+  recipe    Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 }
 
 model Step {
@@ -101,12 +114,12 @@ model Step {
 }
 
 model AffiliateProduct {
-  id       String @id @default(cuid())
-  recipeId String
-  name     String
-  url      String
-  sortOrder Int   @default(0)
-  recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  id        String @id @default(cuid())
+  recipeId  String
+  name      String
+  url       String
+  sortOrder Int    @default(0)
+  recipe    Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 }
 
 model Favorite {
@@ -121,13 +134,22 @@ model Favorite {
 }
 
 model Comment {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   userId    String
   recipeId  String
-  text      String   @db.Text
+  text      String    @db.Text
   rating    Int
-  approved  Boolean  @default(false)
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  recipe    Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  approved  Boolean   @default(true)
+  parentId  String?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe    Recipe    @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  parent    Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   Comment[] @relation("CommentReplies")
+}
+
+model SiteSettings {
+  id        String   @id @default("default")
+  logoUrl   String?
+  updatedAt DateTime @updatedAt
 }

@@ -1,7 +1,6 @@
 import Link from "next/link";
-import Image from "next/image";
 import { getPublishedRecipes, getCategories } from "@/lib/services/recipes";
-import { Clock, Star } from "lucide-react";
+import { RecipeCard } from "@/components/recipe/RecipeCard";
 
 type Props = { searchParams: Promise<{ categoria?: string }> };
 
@@ -46,41 +45,7 @@ export default async function ReceitasPage({ searchParams }: Props) {
 
       <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {recipes.map((recipe) => (
-          <Link
-            key={recipe.id}
-            href={`/receitas/${recipe.slug}`}
-            className="overflow-hidden rounded border border-border hover:border-primary/40"
-          >
-            {recipe.imageUrl && (
-              <div className="relative aspect-[4/3]">
-                <Image
-                  src={recipe.imageUrl}
-                  alt={recipe.title}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width:768px) 100vw, 33vw"
-                />
-              </div>
-            )}
-            <div className="p-4">
-              <span className="font-heading text-[10px] uppercase tracking-widest text-accent">
-                {recipe.category}
-              </span>
-              <h2 className="mt-1 font-serif text-lg italic text-primary">{recipe.title}</h2>
-              <div className="mt-2 flex gap-3 text-xs text-muted">
-                <span className="flex items-center gap-1">
-                  <Clock className="h-3 w-3" />
-                  {recipe.prepTimeMinutes} min
-                </span>
-                {recipe.avgRating > 0 && (
-                  <span className="flex items-center gap-1 text-accent">
-                    <Star className="h-3 w-3 fill-accent" />
-                    {recipe.avgRating.toFixed(1)}
-                  </span>
-                )}
-              </div>
-            </div>
-          </Link>
+          <RecipeCard key={recipe.id} recipe={recipe} />
         ))}
       </div>
 

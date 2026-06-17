@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db";
+import { parseIngredientTerms } from "@/lib/parse-ingredient-terms";
 
 function normalizeIngredient(term: string): string {
   return term
@@ -20,6 +21,7 @@ async function getRecipesWithIngredients() {
       ingredients: true,
       _count: { select: { comments: true } },
     },
+    orderBy: [{ featured: "desc" }, { updatedAt: "desc" }],
   });
 }
 
@@ -39,7 +41,7 @@ async function getApproximateMatches(terms: string[], limit = 3) {
   const recipes = await getRecipesWithIngredients();
   const normalized = terms.map(normalizeIngredient).filter(Boolean);
 
-  const scored = recipes
+  return recipes
     .map((recipe) => {
       const names = recipe.ingredients.map((i) => normalizeIngredient(i.name));
       const matches = normalized.filter((term) =>
@@ -51,15 +53,10 @@ async function getApproximateMatches(terms: string[], limit = 3) {
     .sort((a, b) => b.matches - a.matches)
     .slice(0, limit)
     .map((s) => s.recipe);
-
-  return scored;
 }
 
 export async function searchByFridge(input: string): Promise<FridgeSearchResult> {
-  const terms = input
-    .split(/[,;]+/)
-    .map((t) => t.trim())
-    .filter(Boolean);
+  const terms = parseIngredientTerms(input);
 
   if (terms.length === 0) {
     return { exact: [], approximate: [] };

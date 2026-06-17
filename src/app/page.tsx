@@ -1,8 +1,8 @@
 import Link from "next/link";
-import Image from "next/image";
 import { getFeaturedRecipes, getCategories } from "@/lib/services/recipes";
-import { Clock, Star } from "lucide-react";
 import { AdSlot } from "@/components/ads/AdSlot";
+import { SearchBar } from "@/components/search/SearchBar";
+import { RecipeCard } from "@/components/recipe/RecipeCard";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +22,10 @@ export default async function HomePage() {
           Receitas de família reunidas com clareza e sofisticação. Descubra pratos
           tradicionais, ajuste porções e salve seus favoritos.
         </p>
-        <div className="mt-8 flex flex-wrap justify-center gap-4">
+        <div className="mx-auto mt-8 max-w-2xl">
+          <SearchBar />
+        </div>
+        <div className="mt-6 flex flex-wrap justify-center gap-4">
           <Link
             href="/receitas"
             className="rounded bg-primary px-6 py-3 font-heading text-xs font-bold uppercase tracking-widest text-background"
@@ -30,7 +33,7 @@ export default async function HomePage() {
             Ver receitas
           </Link>
           <Link
-            href="/busca"
+            href="/busca?modo=geladeira"
             className="rounded border border-primary px-6 py-3 font-heading text-xs font-bold uppercase tracking-widest text-primary"
           >
             O que tenho na geladeira
@@ -65,38 +68,7 @@ export default async function HomePage() {
         </h2>
         <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {featured.map((recipe) => (
-            <Link
-              key={recipe.id}
-              href={`/receitas/${recipe.slug}`}
-              className="group overflow-hidden rounded border border-border transition hover:border-primary/40"
-            >
-              {recipe.imageUrl && (
-                <div className="relative aspect-[4/3] bg-border/30">
-                  <Image
-                    src={recipe.imageUrl}
-                    alt={recipe.title}
-                    fill
-                    className="object-cover transition group-hover:scale-105"
-                    sizes="(max-width:768px) 100vw, 33vw"
-                  />
-                </div>
-              )}
-              <div className="p-4">
-                <h3 className="font-serif text-lg italic text-primary">{recipe.title}</h3>
-                <div className="mt-2 flex items-center gap-3 text-xs text-muted">
-                  <span className="flex items-center gap-1">
-                    <Clock className="h-3 w-3" />
-                    {recipe.prepTimeMinutes} min
-                  </span>
-                  {recipe.avgRating > 0 && (
-                    <span className="flex items-center gap-1 text-accent">
-                      <Star className="h-3 w-3 fill-accent" />
-                      {recipe.avgRating.toFixed(1)}
-                    </span>
-                  )}
-                </div>
-              </div>
-            </Link>
+            <RecipeCard key={recipe.id} recipe={recipe} />
           ))}
         </div>
         {featured.length === 0 && (

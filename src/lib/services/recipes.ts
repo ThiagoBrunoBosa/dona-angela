@@ -1,4 +1,4 @@
-import type { Recipe, Ingredient, Step, AffiliateProduct, Comment, User } from "@prisma/client";
+import type { Recipe, Ingredient, Step, AffiliateProduct, Comment, User, RecipeImage } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { slugify } from "@/lib/utils";
 
@@ -6,7 +6,11 @@ export type RecipeWithRelations = Recipe & {
   ingredients: Ingredient[];
   steps: Step[];
   affiliates: AffiliateProduct[];
-  comments?: (Comment & { user: Pick<User, "id" | "name" | "image"> })[];
+  images?: RecipeImage[];
+  comments?: (Comment & {
+    user: Pick<User, "id" | "name" | "image" | "role">;
+    replies?: (Comment & { user: Pick<User, "id" | "name" | "image" | "role"> })[];
+  })[];
   _count?: { favorites: number; comments: number };
 };
 
@@ -20,7 +24,7 @@ export async function getPublishedRecipes(category?: string) {
       ingredients: { orderBy: { sortOrder: "asc" }, take: 3 },
       _count: { select: { comments: true, favorites: true } },
     },
-    orderBy: { createdAt: "desc" },
+    orderBy: [{ featured: "desc" }, { updatedAt: "desc" }],
   });
 }
 
@@ -31,9 +35,19 @@ export async function getRecipeBySlug(slug: string) {
       ingredients: { orderBy: { sortOrder: "asc" } },
       steps: { orderBy: { sortOrder: "asc" } },
       affiliates: { orderBy: { sortOrder: "asc" } },
+      images: { orderBy: { sortOrder: "asc" } },
       comments: {
-        where: { approved: true },
-        include: { user: { select: { id: true, name: true, image: true } } },
+        where: { approved: true, parentId: null },
+        include: {
+          user: { select: { id: true, name: true, image: true, role: true } },
+          replies: {
+            where: { approved: true },
+            include: {
+              user: { select: { id: true, name: true, image: true, role: true } },
+            },
+            orderBy: { createdAt: "asc" },
+          },
+        },
         orderBy: { createdAt: "desc" },
       },
     },
@@ -43,7 +57,7 @@ export async function getRecipeBySlug(slug: string) {
 export async function getFeaturedRecipes(limit = 6) {
   return prisma.recipe.findMany({
     where: { published: true },
-    orderBy: [{ avgRating: "desc" }, { createdAt: "desc" }],
+    orderBy: [{ featured: "desc" }, { updatedAt: "desc" }],
     take: limit,
     include: { _count: { select: { comments: true } } },
   });
@@ -51,11 +65,10 @@ export async function getFeaturedRecipes(limit = 6) {
 
 export async function getCategories() {
   const rows = await prisma.recipe.findMany({
-    where: { published: true },
     select: { category: true },
     distinct: ["category"],
   });
-  return rows.map((r) => r.category).sort();
+  return rows.map((r) => r.category).filter(Boolean).sort();
 }
 
 export type RecipeInput = {
@@ -66,18 +79,38 @@ export type RecipeInput = {
   historyHtml: string;
   videoUrl?: string;
   imageUrl?: string;
+  imageUrls?: string[];
   published?: boolean;
+  featured?: boolean;
   ingredients: { quantity: string; unit: string; name: string }[];
   steps: { text: string }[];
   affiliates: { name: string; url: string }[];
 };
 
+async function syncRecipeImages(recipeId: string, imageUrls: string[]) {
+  await prisma.recipeImage.deleteMany({ where: { recipeId } });
+  if (imageUrls.length > 0) {
+    await prisma.recipeImage.createMany({
+      data: imageUrls.map((url, i) => ({
+        recipeId,
+        url,
+        sortOrder: i,
+      })),
+    });
+  }
+}
+
 export async function createRecipe(data: RecipeInput) {
   const slug = slugify(data.title);
   const existing = await prisma.recipe.findUnique({ where: { slug } });
   const finalSlug = existing ? `${slug}-${Date.now()}` : slug;
+  const imageUrls = data.imageUrls?.length
+    ? data.imageUrls
+    : data.imageUrl
+      ? [data.imageUrl]
+      : [];
 
-  return prisma.recipe.create({
+  const recipe = await prisma.recipe.create({
     data: {
       title: data.title,
       slug: finalSlug,
@@ -86,8 +119,9 @@ export async function createRecipe(data: RecipeInput) {
       defaultYield: data.defaultYield,
       historyHtml: data.historyHtml,
       videoUrl: data.videoUrl || null,
-      imageUrl: data.imageUrl || null,
+      imageUrl: imageUrls[0] ?? data.imageUrl ?? null,
       published: data.published ?? false,
+      featured: data.featured ?? false,
       ingredients: {
         create: data.ingredients.map((ing, i) => ({
           quantity: ing.quantity,
@@ -111,6 +145,9 @@ export async function createRecipe(data: RecipeInput) {
       },
     },
   });
+
+  await syncRecipeImages(recipe.id, imageUrls);
+  return recipe;
 }
 
 export async function updateRecipe(id: string, data: RecipeInput) {
@@ -118,7 +155,13 @@ export async function updateRecipe(id: string, data: RecipeInput) {
   await prisma.step.deleteMany({ where: { recipeId: id } });
   await prisma.affiliateProduct.deleteMany({ where: { recipeId: id } });
 
-  return prisma.recipe.update({
+  const imageUrls = data.imageUrls?.length
+    ? data.imageUrls
+    : data.imageUrl
+      ? [data.imageUrl]
+      : [];
+
+  const recipe = await prisma.recipe.update({
     where: { id },
     data: {
       title: data.title,
@@ -127,8 +170,9 @@ export async function updateRecipe(id: string, data: RecipeInput) {
       defaultYield: data.defaultYield,
       historyHtml: data.historyHtml,
       videoUrl: data.videoUrl || null,
-      imageUrl: data.imageUrl || null,
+      imageUrl: imageUrls[0] ?? data.imageUrl ?? null,
       published: data.published ?? false,
+      featured: data.featured ?? false,
       ingredients: {
         create: data.ingredients.map((ing, i) => ({
           quantity: ing.quantity,
@@ -152,15 +196,23 @@ export async function updateRecipe(id: string, data: RecipeInput) {
       },
     },
   });
+
+  await syncRecipeImages(id, imageUrls);
+  return recipe;
 }
 
 export async function deleteRecipe(id: string) {
   return prisma.recipe.delete({ where: { id } });
 }
 
-export async function getAllRecipesAdmin() {
+export type AdminRecipeSort = "title" | "category" | "avgRating" | "published" | "updatedAt";
+
+export async function getAllRecipesAdmin(
+  sort: AdminRecipeSort = "updatedAt",
+  order: "asc" | "desc" = "desc",
+) {
   return prisma.recipe.findMany({
-    orderBy: { updatedAt: "desc" },
+    orderBy: { [sort]: order },
     include: {
       _count: { select: { comments: true, favorites: true } },
     },
@@ -174,6 +226,7 @@ export async function getRecipeById(id: string) {
       ingredients: { orderBy: { sortOrder: "asc" } },
       steps: { orderBy: { sortOrder: "asc" } },
       affiliates: { orderBy: { sortOrder: "asc" } },
+      images: { orderBy: { sortOrder: "asc" } },
     },
   });
 }
@@ -192,5 +245,6 @@ export async function searchRecipes(query: string) {
     },
     include: { _count: { select: { comments: true } } },
     take: 20,
+    orderBy: [{ featured: "desc" }, { updatedAt: "desc" }],
   });
 }

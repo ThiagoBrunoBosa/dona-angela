@@ -78,11 +78,18 @@ function IngredientItem({
   const [checked, setChecked] = useState(false);
 
   return (
-    <li>
+    <li className="flex items-start gap-2">
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={() => setChecked(!checked)}
+        className="mt-1 h-4 w-4 shrink-0 accent-primary"
+        aria-label={`Marcar ${name}`}
+      />
       <button
         type="button"
         onClick={() => setChecked(!checked)}
-        className={`flex w-full items-baseline gap-2 rounded px-2 py-1 text-left text-sm transition hover:bg-border/30 ${
+        className={`flex flex-1 items-baseline gap-2 rounded px-2 py-1 text-left text-sm transition hover:bg-border/30 ${
           checked ? "ingredient-checked" : ""
         }`}
       >

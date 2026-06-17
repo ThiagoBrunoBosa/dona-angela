@@ -1,11 +1,11 @@
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import { auth } from "@/lib/auth";
 import { getRecipeBySlug } from "@/lib/services/recipes";
 import { isFavorited } from "@/lib/services/favorites";
 import { BASE_URL, parseVideoEmbedUrl } from "@/lib/utils";
 import { AdSlot } from "@/components/ads/AdSlot";
 import { PortionCalculator } from "@/components/recipe/PortionCalculator";
+import { RecipeImageCarousel } from "@/components/recipe/RecipeImageCarousel";
 import { KitchenMode } from "@/components/recipe/KitchenMode";
 import { ShareButtons } from "@/components/recipe/ShareButtons";
 import { FavoriteButton } from "@/components/recipe/FavoriteButton";
@@ -44,6 +44,10 @@ export default async function RecipePage({ params }: Props) {
 
   const embedUrl = recipe.videoUrl ? parseVideoEmbedUrl(recipe.videoUrl) : null;
   const recipeUrl = `${BASE_URL}/receitas/${recipe.slug}`;
+  const galleryImages = [
+    ...(recipe.imageUrl ? [recipe.imageUrl] : []),
+    ...(recipe.images?.map((i) => i.url).filter((u) => u !== recipe.imageUrl) ?? []),
+  ];
 
   const recipeJsonLd = {
     "@context": "https://schema.org",
@@ -99,17 +103,8 @@ export default async function RecipePage({ params }: Props) {
         </div>
       </header>
 
-      {recipe.imageUrl && (
-        <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded">
-          <Image
-            src={recipe.imageUrl}
-            alt={recipe.title}
-            fill
-            priority
-            className="object-cover"
-            sizes="(max-width: 1024px) 100vw, 896px"
-          />
-        </div>
+      {galleryImages.length > 0 && (
+        <RecipeImageCarousel images={galleryImages} title={recipe.title} />
       )}
 
       <section className="font-narrative mt-10 rounded border border-border bg-background p-8">
@@ -200,7 +195,7 @@ export default async function RecipePage({ params }: Props) {
         </aside>
       </div>
 
-      <KitchenMode />
+      <KitchenMode steps={recipe.steps} title={recipe.title} />
       <AdSlot slot={3} />
     </article>
   );

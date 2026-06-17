@@ -17,7 +17,7 @@ export async function getAdminStats() {
   const [recipes, users, pendingComments, totalComments] = await Promise.all([
     prisma.recipe.count(),
     prisma.user.count({ where: { role: "USER" } }),
-    prisma.comment.count({ where: { approved: false } }),
+    prisma.comment.count({ where: { parentId: { not: null } } }),
     prisma.comment.count(),
   ]);
 
@@ -25,7 +25,7 @@ export async function getAdminStats() {
     where: { published: true, avgRating: { gt: 0 } },
     orderBy: { avgRating: "desc" },
     take: 5,
-    select: { title: true, slug: true, avgRating: true },
+    select: { id: true, title: true, slug: true, avgRating: true },
   });
 
   return { recipes, users, pendingComments, totalComments, topRated };

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { Button, Input, Label } from "@/components/ui/form";
+import { PasswordInput } from "@/components/ui/PasswordInput";
 
 export function EntrarForm() {
   const [email, setEmail] = useState("");
@@ -56,9 +57,8 @@ export function EntrarForm() {
         </div>
         <div>
           <Label htmlFor="password">Senha</Label>
-          <Input
+          <PasswordInput
             id="password"
-            type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required

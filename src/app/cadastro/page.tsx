@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { Button, Input, Label } from "@/components/ui/form";
+import { PasswordInput } from "@/components/ui/PasswordInput";
 
 export default function CadastroPage() {
   const router = useRouter();
@@ -72,9 +73,8 @@ export default function CadastroPage() {
         </div>
         <div>
           <Label htmlFor="password">Senha</Label>
-          <Input
+          <PasswordInput
             id="password"
-            type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             minLength={6}

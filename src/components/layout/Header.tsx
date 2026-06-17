@@ -6,11 +6,12 @@ import { useSession, signOut } from "next-auth/react";
 import { Menu, X, User, LogOut, BookOpen, Shield } from "lucide-react";
 import { useState } from "react";
 import { Logo } from "@/components/layout/Logo";
+import { SearchBar } from "@/components/search/SearchBar";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
+  { href: "/", label: "Início" },
   { href: "/receitas", label: "Receitas" },
-  { href: "/busca", label: "Busca" },
 ];
 
 export function Header() {
@@ -20,10 +21,10 @@ export function Header() {
 
   return (
     <header role="banner" className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
         <Logo size="sm" />
 
-        <nav aria-label="Principal" className="hidden items-center gap-6 md:flex">
+        <nav aria-label="Principal" className="hidden items-center gap-6 lg:flex">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -38,6 +39,10 @@ export function Header() {
             </Link>
           ))}
         </nav>
+
+        <div className="hidden flex-1 justify-center px-4 md:flex">
+          <SearchBar compact className="max-w-md" />
+        </div>
 
         <div className="hidden items-center gap-3 md:flex">
           {session ? (
@@ -102,6 +107,7 @@ export function Header() {
           aria-label="Menu mobile"
           className="border-t border-border px-4 py-4 md:hidden"
         >
+          <SearchBar className="mb-4" />
           <div className="flex flex-col gap-3">
             {navLinks.map((link) => (
               <Link
@@ -113,6 +119,9 @@ export function Header() {
                 {link.label}
               </Link>
             ))}
+            <Link href="/busca" onClick={() => setOpen(false)}>
+              Busca avançada
+            </Link>
             {session ? (
               <>
                 <Link href="/meu-caderno" onClick={() => setOpen(false)}>

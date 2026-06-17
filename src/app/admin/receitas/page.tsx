@@ -1,10 +1,34 @@
 import Link from "next/link";
-import { getAllRecipesAdmin } from "@/lib/services/recipes";
-import { Star, Plus, Pencil } from "lucide-react";
+import { getAllRecipesAdmin, type AdminRecipeSort } from "@/lib/services/recipes";
+import { Star, Plus, Pencil, ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/form";
 
-export default async function AdminRecipesPage() {
-  const recipes = await getAllRecipesAdmin();
+type Props = {
+  searchParams: Promise<{
+    sort?: AdminRecipeSort;
+    order?: "asc" | "desc";
+  }>;
+};
+
+function sortLink(
+  field: AdminRecipeSort,
+  current: AdminRecipeSort | undefined,
+  order: "asc" | "desc" | undefined,
+) {
+  const nextOrder = current === field && order === "asc" ? "desc" : "asc";
+  return `/admin/receitas?sort=${field}&order=${nextOrder}`;
+}
+
+export default async function AdminRecipesPage({ searchParams }: Props) {
+  const { sort = "updatedAt", order = "desc" } = await searchParams;
+  const recipes = await getAllRecipesAdmin(sort, order);
+
+  const headers: { key: AdminRecipeSort; label: string }[] = [
+    { key: "title", label: "Título" },
+    { key: "category", label: "Categoria" },
+    { key: "avgRating", label: "Avaliação" },
+    { key: "published", label: "Status" },
+  ];
 
   return (
     <div>
@@ -21,10 +45,18 @@ export default async function AdminRecipesPage() {
         <table className="w-full text-left text-sm">
           <thead>
             <tr className="border-b border-border">
-              <th className="py-2 pr-4">Título</th>
-              <th className="py-2 pr-4">Categoria</th>
-              <th className="py-2 pr-4">Rating</th>
-              <th className="py-2 pr-4">Status</th>
+              {headers.map((h) => (
+                <th key={h.key} className="py-2 pr-4">
+                  <Link
+                    href={sortLink(h.key, sort, order)}
+                    className="inline-flex items-center gap-1 hover:text-primary"
+                  >
+                    {h.label}
+                    <ArrowUpDown className="h-3 w-3" />
+                  </Link>
+                </th>
+              ))}
+              <th className="py-2">Destaque</th>
               <th className="py-2">Ações</th>
             </tr>
           </thead>
@@ -44,6 +76,15 @@ export default async function AdminRecipesPage() {
                     <span className="text-primary">Publicada</span>
                   ) : (
                     <span className="text-muted">Rascunho</span>
+                  )}
+                </td>
+                <td className="py-3 pr-4">
+                  {r.featured ? (
+                    <span className="rounded bg-accent/20 px-2 py-0.5 text-xs text-accent">
+                      Sim
+                    </span>
+                  ) : (
+                    <span className="text-muted">—</span>
                   )}
                 </td>
                 <td className="py-3">

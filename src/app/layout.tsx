@@ -8,8 +8,10 @@ import {
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { Providers } from "@/components/Providers";
+import { SettingsProvider } from "@/components/SettingsProvider";
 import { CookieBanner } from "@/components/ui/CookieBanner";
 import { BASE_URL } from "@/lib/utils";
+import { getSiteSettings } from "@/lib/services/settings";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -72,10 +74,11 @@ const jsonLd = {
   description: "Caderno de Receitas Digitais",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const gaId = process.env.NEXT_PUBLIC_GA_ID;
+  const settings = await getSiteSettings();
 
   return (
     <html
@@ -95,8 +98,10 @@ export default function RootLayout({
       </head>
       <body className="flex min-h-full flex-col font-sans antialiased">
         <Providers>
-          <SiteShell>{children}</SiteShell>
-          <CookieBanner />
+          <SettingsProvider logoUrl={settings.logoUrl}>
+            <SiteShell>{children}</SiteShell>
+            <CookieBanner />
+          </SettingsProvider>
         </Providers>
         {gaId && <GoogleAnalytics gaId={gaId} />}
       </body>

@@ -3,6 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { Button, Input, Label } from "@/components/ui/form";
+import { PasswordInput } from "@/components/ui/PasswordInput";
 
 export default function MinhaContaPage() {
   const { data: session, update } = useSession();
@@ -61,18 +62,16 @@ export default function MinhaContaPage() {
           </legend>
           <div>
             <Label htmlFor="current">Senha atual</Label>
-            <Input
+            <PasswordInput
               id="current"
-              type="password"
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
             />
           </div>
           <div>
             <Label htmlFor="new">Nova senha</Label>
-            <Input
+            <PasswordInput
               id="new"
-              type="password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               minLength={6}

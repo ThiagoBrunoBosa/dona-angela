@@ -7,6 +7,8 @@ const adminNav = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/receitas", label: "Receitas" },
   { href: "/admin/comentarios", label: "Comentários" },
+  { href: "/admin/usuarios", label: "Usuários" },
+  { href: "/admin/configuracoes", label: "Configurações" },
 ];
 
 export default async function AdminLayout({
