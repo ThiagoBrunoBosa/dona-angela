@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { put } from "@vercel/blob";
+import { hasVercelBlob } from "@/lib/blob";
 import { updateSiteLogo } from "@/lib/services/settings";
 
 export async function POST(req: Request) {
@@ -16,7 +17,7 @@ export async function POST(req: Request) {
   }
 
   let url: string;
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
+  if (hasVercelBlob()) {
     const blob = await put(`branding/logo-${Date.now()}-${file.name}`, file, {
       access: "public",
     });

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { put } from "@vercel/blob";
+import { hasVercelBlob } from "@/lib/blob";
 
 export async function POST(req: Request) {
   const session = await auth();
@@ -14,7 +15,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "No file" }, { status: 400 });
   }
 
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
+  if (hasVercelBlob()) {
     const blob = await put(`recipes/${Date.now()}-${file.name}`, file, {
       access: "public",
     });
