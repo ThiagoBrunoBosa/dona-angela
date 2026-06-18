@@ -35,13 +35,16 @@ Portal de receitas de família com painel administrativo, favoritos, comentário
 
 Copie `.env.example` para `.env.local` e preencha.
 
-No **Neon + Vercel**, use duas URLs:
-- `DATABASE_URL` — com `-pooler` no host (runtime da app)
-- `DIRECT_URL` — **sem** `-pooler` (migrations no build). No painel Neon: *Connection string* → *Direct connection*
+No **Neon + Vercel**, use a URL com `-pooler` no host para runtime.
+
+Migrations não rodam no build da Vercel. Ao alterar o schema, aplique localmente com conexão **direta** (sem `-pooler`):
+
+```bash
+DATABASE_URL="postgresql://.../donaangela?sslmode=require" npx prisma migrate deploy
+```
 
 ```env
 DATABASE_URL=postgresql://...-pooler.../donaangela?sslmode=require
-DIRECT_URL=postgresql://.../donaangela?sslmode=require
 AUTH_SECRET=...
 AUTH_URL=http://localhost:3000
 GOOGLE_CLIENT_ID=...
