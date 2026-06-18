@@ -10,6 +10,7 @@ import { KitchenMode } from "@/components/recipe/KitchenMode";
 import { ShareButtons } from "@/components/recipe/ShareButtons";
 import { FavoriteButton } from "@/components/recipe/FavoriteButton";
 import { CommentsSection } from "@/components/recipe/CommentsSection";
+import { RecipeAssistant } from "@/components/recipe/RecipeAssistant";
 import { Clock, Users } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -186,6 +187,8 @@ export default async function RecipePage({ params }: Props) {
               </div>
             </section>
           )}
+
+          <RecipeAssistant recipeSlug={recipe.slug} recipeTitle={recipe.title} />
 
           <CommentsSection recipeId={recipe.id} comments={recipe.comments ?? []} />
         </div>
