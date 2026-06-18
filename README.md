@@ -33,10 +33,15 @@ Portal de receitas de família com painel administrativo, favoritos, comentário
 
 ## Variáveis de ambiente
 
-Copie `.env.example` para `.env.local` e preencha:
+Copie `.env.example` para `.env.local` e preencha.
+
+No **Neon + Vercel**, use duas URLs:
+- `DATABASE_URL` — com `-pooler` no host (runtime da app)
+- `DIRECT_URL` — **sem** `-pooler` (migrations no build). No painel Neon: *Connection string* → *Direct connection*
 
 ```env
-DATABASE_URL=postgresql://...
+DATABASE_URL=postgresql://...-pooler.../donaangela?sslmode=require
+DIRECT_URL=postgresql://.../donaangela?sslmode=require
 AUTH_SECRET=...
 AUTH_URL=http://localhost:3000
 GOOGLE_CLIENT_ID=...
