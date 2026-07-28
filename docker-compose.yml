@@ -1,21 +1,21 @@
 services:
   db:
     image: postgres:16-alpine
-    container_name: dona-angela-db
+    container_name: vo-angela-db
     restart: unless-stopped
     ports:
       - "5432:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: donaangela
+      POSTGRES_DB: voangela
     volumes:
-      - dona-angela-pgdata:/var/lib/postgresql/data
+      - vo-angela-pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d donaangela"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d voangela"]
       interval: 5s
       timeout: 5s
       retries: 10
 
 volumes:
-  dona-angela-pgdata:
+  vo-angela-pgdata:

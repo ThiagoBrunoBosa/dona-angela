@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 async function main() {
-  const adminEmail = process.env.ADMIN_SEED_EMAIL ?? "admin@donaangela.com.br";
+  const adminEmail = process.env.ADMIN_SEED_EMAIL ?? "admin@voangela.com.br";
   const adminPassword = process.env.ADMIN_SEED_PASSWORD ?? "changeme123";
   const passwordHash = await bcrypt.hash(adminPassword, 12);
 
@@ -33,10 +33,10 @@ async function main() {
 
   const caioPassword = await bcrypt.hash("caio123", 12);
   const caio = await prisma.user.upsert({
-    where: { email: "caio.devani@donaangela.com.br" },
+    where: { email: "caio.devani@voangela.com.br" },
     update: { name: "Caio Devani", role: Role.USER, passwordHash: caioPassword },
     create: {
-      email: "caio.devani@donaangela.com.br",
+      email: "caio.devani@voangela.com.br",
       name: "Caio Devani",
       passwordHash: caioPassword,
       role: Role.USER,

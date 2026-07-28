@@ -196,7 +196,7 @@ function CommentItem({
             rating: 5,
             createdAt: reply.createdAt,
             user: {
-              name: session?.user?.name ?? "Dona Angela",
+              name: session?.user?.name ?? "Vó Angela",
               image: session?.user?.image ?? null,
               role: "ADMIN" as Role,
             },
@@ -236,7 +236,7 @@ function CommentItem({
             <li key={r.id}>
               <div className="flex flex-wrap items-center gap-2 text-sm">
                 <span className="font-medium">
-                  {r.user.role === "ADMIN" ? "Dona Angela" : (r.user.name ?? "Usuário")}
+                  {r.user.role === "ADMIN" ? "Vó Angela" : (r.user.name ?? "Usuário")}
                 </span>
                 {r.user.role === "ADMIN" && (
                   <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[10px] uppercase text-primary">
@@ -256,7 +256,7 @@ function CommentItem({
           <Textarea
             value={replyText}
             onChange={(e) => setReplyText(e.target.value)}
-            placeholder="Responder como Dona Angela..."
+            placeholder="Responder como Vó Angela..."
             rows={2}
           />
           <Button type="submit" size="sm" disabled={replying}>

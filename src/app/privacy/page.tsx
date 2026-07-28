@@ -16,8 +16,16 @@ export default function PrivacyPage() {
           Controlador
         </h2>
         <p>
-          Dona Angela — Caderno de Receitas Digitais ({BASE_URL}). Para exercer seus
-          direitos, entre em contato pelo e-mail indicado no site.
+          Vó Angela — Caderno de Receitas Digitais ({BASE_URL}). Para exercer seus
+          direitos, entre em contato pelo e-mail{" "}
+          <a href="mailto:contato@voangela.com.br" className="text-primary underline">
+            contato@voangela.com.br
+          </a>{" "}
+          ou pela página de{" "}
+          <a href="/contato" className="text-primary underline">
+            Contato
+          </a>
+          .
         </p>
 
         <h2 className="font-heading text-xs font-bold uppercase tracking-widest text-primary">

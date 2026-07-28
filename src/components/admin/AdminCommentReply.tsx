@@ -48,7 +48,7 @@ export function AdminCommentReply({ recipeId, parentId }: Props) {
       <Textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
-        placeholder="Responder como Dona Angela..."
+        placeholder="Responder como Vó Angela..."
         rows={2}
       />
       <div className="flex gap-2">

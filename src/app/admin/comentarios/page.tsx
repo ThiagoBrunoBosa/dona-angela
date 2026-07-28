@@ -82,7 +82,7 @@ export default async function AdminCommentsPage({ searchParams }: Props) {
                 {c.replies.map((r) => (
                   <li key={r.id} className="text-sm">
                     <span className="font-medium">
-                      {r.user.role === "ADMIN" ? "Dona Angela" : (r.user.name ?? "Usuário")}
+                      {r.user.role === "ADMIN" ? "Vó Angela" : (r.user.name ?? "Usuário")}
                     </span>
                     <span className="ml-2 text-xs text-muted">
                       {formatDt(r.createdAt)}

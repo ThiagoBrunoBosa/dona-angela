@@ -12,6 +12,8 @@ import { cn } from "@/lib/utils";
 const navLinks = [
   { href: "/", label: "Início" },
   { href: "/receitas", label: "Receitas" },
+  { href: "/quem-somos", label: "Quem somos" },
+  { href: "/contato", label: "Contato" },
 ];
 
 export function Header() {
@@ -20,7 +22,7 @@ export function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header role="banner" className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur">
+    <header role="banner" className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
         <Logo size="sm" />
 

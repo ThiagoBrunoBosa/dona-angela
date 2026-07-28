@@ -31,8 +31,8 @@ export function Logo({
         src={logoUrl}
         alt={
           showTagline
-            ? "Dona Angela — Receitas de Vó"
-            : "Dona Angela"
+            ? "Vó Angela — Receitas de família"
+            : "Vó Angela"
         }
         width={dim.width}
         height={dim.height}

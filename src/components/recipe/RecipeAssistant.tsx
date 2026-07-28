@@ -60,7 +60,7 @@ export function RecipeAssistant({ recipeSlug, recipeTitle }: RecipeAssistantProp
             id="recipe-assistant-heading"
             className="font-heading text-sm font-bold uppercase tracking-widest text-primary"
           >
-            Pergunte para a Dona Angela
+            Pergunte para a Vó Angela
           </h2>
           <p className="mt-1 text-sm text-muted">
             Tire uma dúvida sobre <strong className="font-medium text-foreground">{recipeTitle}</strong>.
@@ -95,7 +95,7 @@ export function RecipeAssistant({ recipeSlug, recipeTitle }: RecipeAssistantProp
           {answer && (
             <blockquote className="rounded border-l-4 border-accent bg-background p-4 font-narrative text-sm leading-relaxed text-foreground">
               <p className="mb-2 font-heading text-[10px] font-bold uppercase tracking-widest text-accent">
-                Dona Angela diz:
+                Vó Angela diz:
               </p>
               {answer.split("\n").map((line, i) => (
                 <p key={i} className={i > 0 ? "mt-2" : undefined}>
@@ -117,7 +117,7 @@ export function RecipeAssistant({ recipeSlug, recipeTitle }: RecipeAssistantProp
       ) : (
         <div className="mt-5 rounded border border-dashed border-border bg-background/80 p-4 text-sm">
           <p className="text-muted">
-            Entre na sua conta para conversar com a Dona Angela sobre esta receita.
+            Entre na sua conta para conversar com a Vó Angela sobre esta receita.
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             <Button type="button" size="sm" onClick={() => setShowLogin(true)}>

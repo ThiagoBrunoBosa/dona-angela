@@ -20,7 +20,7 @@ type Props = { params: Promise<{ slug: string }> };
 export async function POST(req: Request, { params }: Props) {
   const session = await auth();
   if (!session?.user?.id) {
-    return NextResponse.json({ error: "Faça login para perguntar à Dona Angela." }, { status: 401 });
+    return NextResponse.json({ error: "Faça login para perguntar à Vó Angela." }, { status: 401 });
   }
 
   if (!isRecipeAiEnabled()) {

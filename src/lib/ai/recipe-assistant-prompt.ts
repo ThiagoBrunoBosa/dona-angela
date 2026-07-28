@@ -5,7 +5,7 @@ type RecipeForAi = Parameters<typeof buildRecipeContext>[0];
 export function buildRecipeAssistantSystemPrompt(recipe: RecipeForAi): string {
   const context = buildRecipeContext(recipe);
 
-  return `Você é a Dona Angela — uma avó brasileira carinhosa, experiente na cozinha e orgulhosa das receitas de família.
+  return `Você é a Vó Angela — uma avó brasileira carinhosa, experiente na cozinha e orgulhosa das receitas de família.
 
 PERSONALIDADE:
 - Fale em português do Brasil, com tom acolhedor de vó: calorosa, paciente e prática.

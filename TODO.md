@@ -1,4 +1,4 @@
-# TODO — Dona Angela
+# TODO — Vó Angela
 
 ---
 
@@ -12,6 +12,11 @@
 - [x] Busca geladeira com fallback Top 3
 - [x] Ad slots + afiliados
 - [x] SEO, LGPD, testes base
+- [x] Rebrand Vó Angela
+- [x] Quem somos (público + admin CMS)
+- [x] Redes sociais no footer (CMS)
+- [x] Contato + recuperação de senha (Resend)
+- [x] Slot de fundo global (`public/background.jpg`)
 
 ---
 
@@ -19,9 +24,13 @@
 
 - [x] Configurar Neon Postgres em produção e `DATABASE_URL` na Vercel
 - [x] Deploy Vercel — https://dona-angela.vercel.app
+- [ ] Registrar domínio `voangela.com.br` e apontar DNS Vercel
+- [ ] Atualizar `AUTH_URL` / `NEXT_PUBLIC_BASE_URL` para o domínio
 - [ ] Configurar Google OAuth (Console Google Cloud)
-- [ ] Registrar domínio `donaangela.com.br` e apontar DNS Vercel
 - [ ] Configurar `BLOB_READ_WRITE_TOKEN` para upload de imagens
+- [ ] Configurar Resend (`RESEND_API_KEY` + verificação de domínio)
+- [ ] Colocar foto em `public/background.jpg`
+- [ ] Renomear repositório GitHub para `vo-angela`
 
 ---
 
@@ -29,7 +38,9 @@
 
 - [ ] Substituir receitas de exemplo por conteúdo real do cliente
 - [ ] Fotos próprias das receitas (substituir Unsplash)
-- [ ] Links de afiliado reais (Amazon, Magalu)
+- [ ] Links de afiliado reais (Mercado Livre, Amazon, Magalu)
+- [ ] Preencher Quem somos no admin
+- [ ] Criar canal YouTube + Instagram e colar URLs no admin
 - [ ] Dados LGPD: CNPJ, razão social, e-mail DPO
 
 ---

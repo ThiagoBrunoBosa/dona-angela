@@ -149,7 +149,24 @@ model Comment {
 }
 
 model SiteSettings {
-  id        String   @id @default("default")
-  logoUrl   String?
-  updatedAt DateTime @updatedAt
+  id            String   @id @default("default")
+  logoUrl       String?
+  aboutTitle    String?  @default("Quem somos")
+  aboutHtml     String?  @db.Text
+  aboutImageUrl String?
+  instagramUrl  String?
+  youtubeUrl    String?
+  facebookUrl   String?
+  tiktokUrl     String?
+  updatedAt     DateTime @updatedAt
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expires   DateTime
+  createdAt DateTime @default(now())
+
+  @@index([email])
 }

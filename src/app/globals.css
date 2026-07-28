@@ -25,9 +25,25 @@
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
+  background-image:
+    linear-gradient(
+      rgba(252, 251, 250, 0.82),
+      rgba(252, 251, 250, 0.88)
+    ),
+    url("/background.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
   color: var(--foreground);
   font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+@media (max-width: 768px) {
+  body {
+    background-attachment: scroll;
+  }
 }
 
 .font-serif {

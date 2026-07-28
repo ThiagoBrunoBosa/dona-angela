@@ -2,20 +2,19 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Button, Input, Label } from "@/components/ui/form";
 import { PasswordInput } from "@/components/ui/PasswordInput";
 
 export function EntrarForm() {
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const callbackUrl =
-    typeof window !== "undefined"
-      ? new URLSearchParams(window.location.search).get("callbackUrl") ?? "/"
-      : "/";
+  const resetOk = searchParams.get("reset") === "1";
+  const callbackUrl = searchParams.get("callbackUrl") ?? "/";
 
   const handleCredentials = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,6 +44,11 @@ export function EntrarForm() {
   return (
     <>
       <form onSubmit={handleCredentials} className="mt-8 space-y-4">
+        {resetOk && (
+          <p className="text-sm text-primary">
+            Senha atualizada. Entre com a nova senha.
+          </p>
+        )}
         <div>
           <Label htmlFor="email">E-mail</Label>
           <Input
@@ -68,6 +72,11 @@ export function EntrarForm() {
         <Button type="submit" className="w-full" disabled={loading}>
           {loading ? "Entrando..." : "Entrar"}
         </Button>
+        <p className="text-center text-sm">
+          <Link href="/recuperar-senha" className="text-muted underline hover:text-primary">
+            Esqueci minha senha
+          </Link>
+        </p>
       </form>
 
       <div className="my-6 flex items-center gap-4">

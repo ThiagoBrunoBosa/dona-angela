@@ -11,10 +11,10 @@ const prisma = new PrismaClient();
 async function main() {
   const passwordHash = await bcrypt.hash("caio123", 12);
   const user = await prisma.user.upsert({
-    where: { email: "caio.devani@donaangela.com.br" },
+    where: { email: "caio.devani@voangela.com.br" },
     update: { name: "Caio Devani", role: Role.USER, passwordHash },
     create: {
-      email: "caio.devani@donaangela.com.br",
+      email: "caio.devani@voangela.com.br",
       name: "Caio Devani",
       passwordHash,
       role: Role.USER,

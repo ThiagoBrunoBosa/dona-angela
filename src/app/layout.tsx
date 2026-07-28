@@ -41,23 +41,23 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "Dona Angela — Caderno de Receitas Digitais",
-    template: "%s | Dona Angela",
+    default: "Vó Angela — Caderno de Receitas Digitais",
+    template: "%s | Vó Angela",
   },
   description:
     "Receitas de família com elegância e clareza. Descubra, cozinhe e salve seus pratos favoritos.",
-  keywords: ["receitas", "culinária", "Dona Angela", "receitas de família"],
+  keywords: ["receitas", "culinária", "Vó Angela", "receitas de família"],
   openGraph: {
     type: "website",
     locale: "pt_BR",
     url: BASE_URL,
-    siteName: "Dona Angela",
-    title: "Dona Angela — Caderno de Receitas Digitais",
+    siteName: "Vó Angela",
+    title: "Vó Angela — Caderno de Receitas Digitais",
     description: "Receitas de família com elegância e clareza.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Dona Angela",
+    title: "Vó Angela",
     description: "Caderno de Receitas Digitais",
   },
   icons: {
@@ -69,7 +69,7 @@ export const metadata: Metadata = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "Dona Angela",
+  name: "Vó Angela",
   url: BASE_URL,
   description: "Caderno de Receitas Digitais",
 };
@@ -98,7 +98,13 @@ export default async function RootLayout({
       </head>
       <body className="flex min-h-full flex-col font-sans antialiased">
         <Providers>
-          <SettingsProvider logoUrl={settings.logoUrl}>
+          <SettingsProvider
+            logoUrl={settings.logoUrl}
+            instagramUrl={settings.instagramUrl}
+            youtubeUrl={settings.youtubeUrl}
+            facebookUrl={settings.facebookUrl}
+            tiktokUrl={settings.tiktokUrl}
+          >
             <SiteShell>{children}</SiteShell>
             <CookieBanner />
           </SettingsProvider>
