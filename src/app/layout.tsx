@@ -14,6 +14,8 @@ import { BASE_URL } from "@/lib/utils";
 import { getSiteSettings } from "@/lib/services/settings";
 import "./globals.css";
 
+export const dynamic = "force-dynamic";
+
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],

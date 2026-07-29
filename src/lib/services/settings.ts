@@ -12,20 +12,35 @@ export type SiteSettingsData = {
   tiktokUrl: string | null;
 };
 
+const defaults: SiteSettingsData = {
+  logoUrl: DEFAULT_LOGO,
+  aboutTitle: "Quem somos",
+  aboutHtml: "",
+  aboutImageUrl: null,
+  instagramUrl: null,
+  youtubeUrl: null,
+  facebookUrl: null,
+  tiktokUrl: null,
+};
+
 export async function getSiteSettings(): Promise<SiteSettingsData> {
-  const settings = await prisma.siteSettings.findUnique({
-    where: { id: "default" },
-  });
-  return {
-    logoUrl: settings?.logoUrl ?? DEFAULT_LOGO,
-    aboutTitle: settings?.aboutTitle ?? "Quem somos",
-    aboutHtml: settings?.aboutHtml ?? "",
-    aboutImageUrl: settings?.aboutImageUrl ?? null,
-    instagramUrl: settings?.instagramUrl ?? null,
-    youtubeUrl: settings?.youtubeUrl ?? null,
-    facebookUrl: settings?.facebookUrl ?? null,
-    tiktokUrl: settings?.tiktokUrl ?? null,
-  };
+  try {
+    const settings = await prisma.siteSettings.findUnique({
+      where: { id: "default" },
+    });
+    return {
+      logoUrl: settings?.logoUrl ?? DEFAULT_LOGO,
+      aboutTitle: settings?.aboutTitle ?? "Quem somos",
+      aboutHtml: settings?.aboutHtml ?? "",
+      aboutImageUrl: settings?.aboutImageUrl ?? null,
+      instagramUrl: settings?.instagramUrl ?? null,
+      youtubeUrl: settings?.youtubeUrl ?? null,
+      facebookUrl: settings?.facebookUrl ?? null,
+      tiktokUrl: settings?.tiktokUrl ?? null,
+    };
+  } catch {
+    return defaults;
+  }
 }
 
 export async function updateSiteLogo(logoUrl: string) {

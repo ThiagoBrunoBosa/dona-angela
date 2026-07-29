@@ -28,8 +28,8 @@ body {
   background-color: var(--background);
   background-image:
     linear-gradient(
-      rgba(252, 251, 250, 0.82),
-      rgba(252, 251, 250, 0.88)
+      rgba(252, 251, 250, 0.35),
+      rgba(252, 251, 250, 0.45)
     ),
     url("/background.jpg");
   background-size: cover;
